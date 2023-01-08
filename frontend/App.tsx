@@ -26,8 +26,10 @@ export function App(){
     convertDurationInMs: -1,
   })
 
-  const changed = useRef(false)
+  const changed = useRef(true)
   const markdownContent = useRef("## Name")
+  const intermediateHtmlContentRef = useRef<HTMLDivElement>(null)
+  const highlightedHtmlContentRef = useRef<HTMLDivElement>(null)
 
   const updateMarkdown = React.useCallback((value: string) => {
     markdownContent.current = value;
@@ -57,7 +59,9 @@ export function App(){
     setTimeout(() => {
       Prism.plugins.autoloader.languages_path = 'https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/components/';
       Prism.plugins.autoloader.use_minified = true;
-      Prism.highlightAll()
+      Prism.highlightAll();
+      
+      highlightedHtmlContentRef.current!.innerHTML = intermediateHtmlContentRef.current!.innerHTML;
     }, 200);
   }
   
@@ -84,16 +88,15 @@ export function App(){
 
       <div className="main h-100 mt-3" onKeyDown={onKeyDown}>
         <div className='pe-2 col-12 col-md-6'>
-          <Form.Select className="select-library" aria-label="Change library for convertion" defaultValue={store.library} onChange={changeLibrary}>
+          <Form.Select className="select-library" defaultValue={store.library} onChange={changeLibrary}>
             <option value="pulldown-cmark">pulldown-cmark (Rust)</option>
             <option value="marked">marked (Nodejs)</option>
           </Form.Select>
 
-          <Button variant="primary" className="mb-2 ms-2" onClick={convert}>Convert</Button>
+          <Button variant="primary" className="mb-1 ms-2" onClick={convert}>Convert</Button>
 
           <CodeMirror
             className='md-textarea border'
-            // height="600px"
             theme="dark"
             value={markdownContent.current}
             onChange={updateMarkdown}
@@ -114,7 +117,8 @@ export function App(){
               />
             </Tab>
             <Tab eventKey="Preview" title="Preview">
-              <div className="border preview line-numbers p-1" dangerouslySetInnerHTML={{__html: store.htmlResult}} ></div>
+              <div ref={highlightedHtmlContentRef} className="border preview line-numbers p-1"></div>
+              <div ref={intermediateHtmlContentRef} className='d-none line-numbers' dangerouslySetInnerHTML={{__html: store.htmlResult}} ></div>
             </Tab>
           </Tabs>
         </div>

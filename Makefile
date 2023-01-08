@@ -3,3 +3,4 @@ clean:
 	
 build:
 	wasm-pack build
+	npm run build

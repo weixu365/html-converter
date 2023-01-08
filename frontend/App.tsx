@@ -1,11 +1,19 @@
 
 import React, { ChangeEvent, KeyboardEvent, KeyboardEventHandler, useState } from 'react';
+import * as Prism from 'prismjs';
+import 'prismjs/plugins/line-numbers/prism-line-numbers';
+import 'prismjs/plugins/autoloader/prism-autoloader';
+
+import "prismjs/themes/prism-tomorrow.min.css";
+import "prismjs/plugins/line-numbers/prism-line-numbers.min.css";
+
 import { marked } from 'marked';
 import { Button, Form, Tab, Tabs } from 'react-bootstrap';
 import CodeMirror from '@uiw/react-codemirror';
 import { markdown, markdownLanguage } from '@codemirror/lang-markdown';
 import { html } from '@codemirror/lang-html';
 import { languages } from '@codemirror/language-data';
+import { EditorView } from '@codemirror/view';
 
 import * as md from "../pkg/md_to_html"
 import './App.css'
@@ -23,7 +31,7 @@ export function App(){
   }, [store]);
 
   const changeLibrary = React.useCallback((e: ChangeEvent<HTMLSelectElement>) => {
-    setStore({...store, library: e.target.value});
+    setStore({...store, library: e.target.value, convertDurationInMs: -1});
   }, [store]);
 
   const convert = () => {
@@ -32,7 +40,13 @@ export function App(){
     const start = Date.now();
     const html = toHtml(store.markdown)
     const duration = Date.now() - start;
+
     setStore({...store, htmlResult: html, convertDurationInMs: duration});
+    setTimeout(() => {
+      Prism.plugins.autoloader.languages_path = 'https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/components/';
+      Prism.plugins.autoloader.use_minified = true;
+      Prism.highlightAll()
+    }, 200);
   }
   
   const onKeyDown: KeyboardEventHandler = (event: KeyboardEvent<Element>) => {
@@ -65,7 +79,7 @@ export function App(){
             value={store.markdown}
             onChange={updateMarkdown}
             onKeyDown={onKeyDown}
-            extensions={[markdown({ base: markdownLanguage, codeLanguages: languages })]}
+            extensions={[markdown({ base: markdownLanguage, codeLanguages: languages }), EditorView.lineWrapping]}
           />
         </div>
         
@@ -77,11 +91,11 @@ export function App(){
                 // height="600px"
                 theme="dark"
                 value={store.htmlResult}
-                extensions={[html()]}
+                extensions={[html(), EditorView.lineWrapping]}
               />
             </Tab>
             <Tab eventKey="Preview" title="Preview">
-              <div className="border preview" dangerouslySetInnerHTML={{__html: store.htmlResult}} ></div>
+              <div className="border preview line-numbers" dangerouslySetInnerHTML={{__html: store.htmlResult}} ></div>
             </Tab>
           </Tabs>
         </div>

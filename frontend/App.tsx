@@ -72,7 +72,7 @@ export function App(){
       </div>
 
       <div className="main h-100 mt-3" onKeyDown={onKeyDown}>
-        <div className='col-6'>
+        <div className='pe-2 col-12 col-md-6'>
           <Form.Select className="select-library" aria-label="Change library for convertion" defaultValue={store.library} onChange={changeLibrary}>
             <option value="pulldown-cmark">pulldown-cmark (Rust)</option>
             <option value="marked">marked (Nodejs)</option>
@@ -91,7 +91,7 @@ export function App(){
           />
         </div>
         
-        <div className='col-6'>
+        <div className='ps-2 col-12 col-md-6'>
           <Tabs defaultActiveKey="Html">
             <Tab eventKey="Html" title="Html">
               <CodeMirror

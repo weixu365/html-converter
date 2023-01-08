@@ -1,3 +1,17 @@
 .main {
   display: flex;
+  gap: 2em;
+}
+
+.CodeMirror {
+    height: 800px;
+}
+
+.cm-editor {
+    height: 600px;
+}
+
+.preview {
+    height: 600px;
+    overflow: auto;
 }

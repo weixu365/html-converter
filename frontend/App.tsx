@@ -1,7 +1,6 @@
 
-import React, { useState } from 'react';
-import Tab from 'react-bootstrap/Tab';
-import Tabs from 'react-bootstrap/Tabs';
+import React, { KeyboardEvent, KeyboardEventHandler, useState } from 'react';
+import { Button, Tab, Tabs } from 'react-bootstrap';
 import CodeMirror from '@uiw/react-codemirror';
 import { markdown, markdownLanguage } from '@codemirror/lang-markdown';
 import { html } from '@codemirror/lang-html';
@@ -18,43 +17,57 @@ export function App(){
 
   const updateMarkdown = React.useCallback((value: string) => {
     setStore({...store, markdown: value});
-  }, []);
+  }, [store]);
 
   const convert = () => {
     setStore({...store, htmlResult: md.md_to_html(store.markdown)});
   }
   
+  const onKeyDown: KeyboardEventHandler = (event: KeyboardEvent<Element>) => {
+    if ((event.metaKey || event.ctrlKey) && event.key == 'Enter'){
+      convert();
+    }
+  }
+  
   return (
-    <>
+    <div>
       <h1>Html Converter</h1>
 
-      <div className="main h-100">
-        <div className='col-5'>
+      <div className="main h-100" onKeyDown={onKeyDown}>
+        <div className='col-6'>
+          <Button variant="primary" className="mb-2" onClick={convert}>Convert</Button>
+
           <CodeMirror
-            className='md-textarea'
+            className='md-textarea border'
+            // height="600px"
+            theme="dark"
             value={store.markdown}
             onChange={updateMarkdown}
             extensions={[markdown({ base: markdownLanguage, codeLanguages: languages })]}
           />
         </div>
-
-        <button type="button" onClick={convert}>Convert</button>
         
-        <div className='col-5'>
+        <div className='col-6'>
           <Tabs defaultActiveKey="Html">
             <Tab eventKey="Html" title="Html">
               <CodeMirror
-                className='md-html'
+                className='md-html border'
+                // height="600px"
+                theme="dark"
                 value={store.htmlResult}
                 extensions={[html()]}
               />
             </Tab>
             <Tab eventKey="Preview" title="Preview">
-              <div dangerouslySetInnerHTML={{__html: store.htmlResult}} ></div>
+              <div className="border preview" dangerouslySetInnerHTML={{__html: store.htmlResult}} ></div>
             </Tab>
           </Tabs>
         </div>
       </div>
-    </>
+
+      <div>
+        
+      </div>
+    </div>
   )
 }

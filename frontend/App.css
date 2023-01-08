@@ -24,3 +24,7 @@ select.select-library {
     height: 600px;
     overflow: auto;
 }
+
+.links {
+    font-size: 1.5em;
+}

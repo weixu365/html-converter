@@ -59,10 +59,13 @@ export function App(){
   
   return (
     <div>
-      <h1>
-        Html Converter
-        <span className="repository"><a href="https://github.com/weixu365/html-converter"><i className="bi bi-github"></i></a></span>
-      </h1>
+      <div className="position-relative">
+        <h1>Html Converter</h1>
+
+        <span className="links position-absolute top-0 end-0 m-2">
+          <a href="https://github.com/weixu365/html-converter"><i className="bi bi-github"></i></a>
+        </span>
+      </div>
       <div>
         Using the wasm version of <a href="https://github.com/raphlinus/pulldown-cmark">pulldown cmark</a> packed
         with <a href="https://github.com/rustwasm/wasm-pack">wasm-pack</a>

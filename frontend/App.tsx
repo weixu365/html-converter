@@ -86,41 +86,42 @@ export function App(){
         with <a href="https://github.com/rustwasm/wasm-pack">wasm-pack</a>
       </div>
 
-      <div className="main h-100 mt-3" onKeyDown={onKeyDown}>
-        <div className='pe-2 col-12 col-md-6'>
-          <Form.Select className="select-library" defaultValue={store.library} onChange={changeLibrary}>
-            <option value="pulldown-cmark">pulldown-cmark (Rust)</option>
-            <option value="marked">marked (Nodejs)</option>
-          </Form.Select>
+      <div className="main container-fluid mt-3" onKeyDown={onKeyDown}>
+        <div className="row g-2">
+          <div className='col-12 col-lg-6'>
+            <Form.Select className="select-library" defaultValue={store.library} onChange={changeLibrary}>
+              <option value="pulldown-cmark">pulldown-cmark (Rust)</option>
+              <option value="marked">marked (Nodejs)</option>
+            </Form.Select>
 
-          <Button variant="primary" className="mb-1 ms-2" onClick={convert}>Convert</Button>
+            <Button variant="primary" className="mb-1 ms-2" onClick={convert}>Convert</Button>
 
-          <CodeMirror
-            className='md-textarea border'
-            theme="dark"
-            value={markdownContent.current}
-            onChange={updateMarkdown}
-            onKeyDown={onKeyDown}
-            extensions={[markdown({ base: markdownLanguage, codeLanguages: languages }), EditorView.lineWrapping]}
-          />
-        </div>
-        
-        <div className='ps-2 col-12 col-md-6'>
-          <Tabs defaultActiveKey="Html">
-            <Tab eventKey="Html" title="Html">
-              <CodeMirror
-                className='md-html border'
-                // height="600px"
-                theme="dark"
-                value={store.htmlResult}
-                extensions={[html(), EditorView.lineWrapping]}
-              />
-            </Tab>
-            <Tab eventKey="Preview" title="Preview">
-              <div ref={highlightedHtmlContentRef} className="border preview line-numbers p-1"></div>
-              <div ref={intermediateHtmlContentRef} className='d-none line-numbers' dangerouslySetInnerHTML={{__html: store.htmlResult}} ></div>
-            </Tab>
-          </Tabs>
+            <CodeMirror
+              className='md-textarea border'
+              theme="dark"
+              value={markdownContent.current}
+              onChange={updateMarkdown}
+              onKeyDown={onKeyDown}
+              extensions={[markdown({ base: markdownLanguage, codeLanguages: languages }), EditorView.lineWrapping]}
+            />
+          </div>
+          
+          <div className='col-12 col-lg-6'>
+            <Tabs defaultActiveKey="Html">
+              <Tab eventKey="Html" title="Html">
+                <CodeMirror
+                  className='md-html border'
+                  theme="dark"
+                  value={store.htmlResult}
+                  extensions={[html(), EditorView.lineWrapping]}
+                />
+              </Tab>
+              <Tab eventKey="Preview" title="Preview">
+                <div ref={highlightedHtmlContentRef} className="border preview line-numbers p-1"></div>
+                <div ref={intermediateHtmlContentRef} className='d-none line-numbers' dangerouslySetInnerHTML={{__html: store.htmlResult}} ></div>
+              </Tab>
+            </Tabs>
+          </div>
         </div>
       </div>
 

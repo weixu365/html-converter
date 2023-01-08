@@ -1,9 +1,9 @@
-.main {
-  display: flex;
-}
-
 .repository {
     margin-left: 1em;
+}
+
+div.main {
+    padding: 0;
 }
 
 select.select-library {

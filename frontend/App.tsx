@@ -13,6 +13,7 @@ export function App(){
   const [store, setStore] = useState({
     markdown: "## Name",
     htmlResult: "",
+    convertDurationInMs: -1,
   })
 
   const updateMarkdown = React.useCallback((value: string) => {
@@ -20,7 +21,10 @@ export function App(){
   }, [store]);
 
   const convert = () => {
-    setStore({...store, htmlResult: md.md_to_html(store.markdown)});
+    const start = Date.now();
+    const html = md.md_to_html(store.markdown)
+    const duration = Date.now() - start;
+    setStore({...store, htmlResult: html, convertDurationInMs: duration});
   }
   
   const onKeyDown: KeyboardEventHandler = (event: KeyboardEvent<Element>) => {
@@ -66,7 +70,7 @@ export function App(){
       </div>
 
       <div>
-        
+        {store.convertDurationInMs >= 0 && <span>Converted in {store.convertDurationInMs} milliseconds</span>}
       </div>
     </div>
   )

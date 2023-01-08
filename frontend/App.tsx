@@ -1,6 +1,7 @@
 
-import React, { KeyboardEvent, KeyboardEventHandler, useState } from 'react';
-import { Button, Tab, Tabs } from 'react-bootstrap';
+import React, { ChangeEvent, KeyboardEvent, KeyboardEventHandler, useState } from 'react';
+import { marked } from 'marked';
+import { Button, Form, Tab, Tabs } from 'react-bootstrap';
 import CodeMirror from '@uiw/react-codemirror';
 import { markdown, markdownLanguage } from '@codemirror/lang-markdown';
 import { html } from '@codemirror/lang-html';
@@ -11,6 +12,7 @@ import './App.css'
 
 export function App(){
   const [store, setStore] = useState({
+    library: "pulldown-cmark",
     markdown: "## Name",
     htmlResult: "",
     convertDurationInMs: -1,
@@ -20,9 +22,15 @@ export function App(){
     setStore({...store, markdown: value});
   }, [store]);
 
+  const changeLibrary = React.useCallback((e: ChangeEvent<HTMLSelectElement>) => {
+    setStore({...store, library: e.target.value});
+  }, [store]);
+
   const convert = () => {
+    const toHtml = store.library === 'pulldown-cmark' ? md.md_to_html : marked.parse;
+
     const start = Date.now();
-    const html = md.md_to_html(store.markdown)
+    const html = toHtml(store.markdown)
     const duration = Date.now() - start;
     setStore({...store, htmlResult: html, convertDurationInMs: duration});
   }
@@ -30,6 +38,7 @@ export function App(){
   const onKeyDown: KeyboardEventHandler = (event: KeyboardEvent<Element>) => {
     if ((event.metaKey || event.ctrlKey) && event.key == 'Enter'){
       convert();
+      event.preventDefault();
     }
   }
   
@@ -42,6 +51,11 @@ export function App(){
 
       <div className="main h-100 mt-3" onKeyDown={onKeyDown}>
         <div className='col-6'>
+          <Form.Select className="select-library" aria-label="Change library for convertion" defaultValue={store.library} onChange={changeLibrary}>
+            <option value="pulldown-cmark">pulldown-cmark (Rust)</option>
+            <option value="marked">marked (Nodejs)</option>
+          </Form.Select>
+
           <Button variant="primary" className="mb-2" onClick={convert}>Convert</Button>
 
           <CodeMirror
@@ -50,6 +64,7 @@ export function App(){
             theme="dark"
             value={store.markdown}
             onChange={updateMarkdown}
+            onKeyDown={onKeyDown}
             extensions={[markdown({ base: markdownLanguage, codeLanguages: languages })]}
           />
         </div>
@@ -73,7 +88,7 @@ export function App(){
       </div>
 
       <div>
-        {store.convertDurationInMs >= 0 && <span>Converted in {store.convertDurationInMs} milliseconds</span>}
+        {store.convertDurationInMs >= 0 && <span>Converted in {store.convertDurationInMs} milliseconds using {store.library}</span>}
       </div>
     </div>
   )

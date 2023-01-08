@@ -1,22 +1,26 @@
 .main {
   display: flex;
-  gap: 2em;
+  gap: 1em;
 }
 
-.CodeMirror {
-    height: 800px;
+.repository {
+    margin-left: 1em;
+}
+
+select.select-library {
+    width: auto;
+    display: inline-block;
 }
 
 .cm-editor {
     height: 600px;
 }
 
+.duration {
+    height: 1em;
+}
+
 .preview {
     height: 600px;
     overflow: auto;
-}
-
-select.select-library {
-    width: auto;
-    display: inline-block;
 }

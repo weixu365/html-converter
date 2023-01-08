@@ -17,6 +17,7 @@ import { EditorView } from '@codemirror/view';
 
 import * as md from "../pkg/md_to_html"
 import './App.css'
+import { CheatSheet } from './CheatSheet';
 
 export function App(){
   const [store, setStore] = useState({
@@ -58,9 +59,13 @@ export function App(){
   
   return (
     <div>
-      <h1>Html Converter</h1>
+      <h1>
+        Html Converter
+        <span className="repository"><a href="https://github.com/weixu365/html-converter"><i className="bi bi-github"></i></a></span>
+      </h1>
       <div>
-        Using wasm version of <a href="https://github.com/raphlinus/pulldown-cmark">pulldown cmark</a> packed with <a href="https://github.com/rustwasm/wasm-pack">wasm-pack</a>
+        Using the wasm version of <a href="https://github.com/raphlinus/pulldown-cmark">pulldown cmark</a> packed
+        with <a href="https://github.com/rustwasm/wasm-pack">wasm-pack</a>
       </div>
 
       <div className="main h-100 mt-3" onKeyDown={onKeyDown}>
@@ -70,7 +75,7 @@ export function App(){
             <option value="marked">marked (Nodejs)</option>
           </Form.Select>
 
-          <Button variant="primary" className="mb-2" onClick={convert}>Convert</Button>
+          <Button variant="primary" className="mb-2 ms-2" onClick={convert}>Convert</Button>
 
           <CodeMirror
             className='md-textarea border'
@@ -95,15 +100,17 @@ export function App(){
               />
             </Tab>
             <Tab eventKey="Preview" title="Preview">
-              <div className="border preview line-numbers" dangerouslySetInnerHTML={{__html: store.htmlResult}} ></div>
+              <div className="border preview line-numbers p-1" dangerouslySetInnerHTML={{__html: store.htmlResult}} ></div>
             </Tab>
           </Tabs>
         </div>
       </div>
 
-      <div>
+      <div className="duration">
         {store.convertDurationInMs >= 0 && <span>Converted in {store.convertDurationInMs} milliseconds using {store.library}</span>}
       </div>
+
+      <CheatSheet />
     </div>
   )
 }

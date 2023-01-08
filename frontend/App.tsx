@@ -1,5 +1,5 @@
 
-import React, { ChangeEvent, KeyboardEvent, KeyboardEventHandler, useState } from 'react';
+import React, { ChangeEvent, KeyboardEvent, KeyboardEventHandler, useEffect, useRef, useState } from 'react';
 import * as Prism from 'prismjs';
 import 'prismjs/plugins/line-numbers/prism-line-numbers';
 import 'prismjs/plugins/autoloader/prism-autoloader';
@@ -22,24 +22,35 @@ import { CheatSheet } from './CheatSheet';
 export function App(){
   const [store, setStore] = useState({
     library: "pulldown-cmark",
-    markdown: "## Name",
     htmlResult: "",
     convertDurationInMs: -1,
   })
 
+  const changed = useRef(false)
+  const markdownContent = useRef("## Name")
+
   const updateMarkdown = React.useCallback((value: string) => {
-    setStore({...store, markdown: value});
+    markdownContent.current = value;
+    changed.current = true;
   }, [store]);
 
+  useEffect(() => {
+    setInterval(() => {
+      if(changed.current) {
+        changed.current = false;
+        convert();
+      }
+    }, 500);  
+  })
+  
   const changeLibrary = React.useCallback((e: ChangeEvent<HTMLSelectElement>) => {
     setStore({...store, library: e.target.value, convertDurationInMs: -1});
   }, [store]);
 
   const convert = () => {
     const toHtml = store.library === 'pulldown-cmark' ? md.md_to_html : marked.parse;
-
     const start = Date.now();
-    const html = toHtml(store.markdown)
+    const html = toHtml(markdownContent.current)
     const duration = Date.now() - start;
 
     setStore({...store, htmlResult: html, convertDurationInMs: duration});
@@ -84,7 +95,7 @@ export function App(){
             className='md-textarea border'
             // height="600px"
             theme="dark"
-            value={store.markdown}
+            value={markdownContent.current}
             onChange={updateMarkdown}
             onKeyDown={onKeyDown}
             extensions={[markdown({ base: markdownLanguage, codeLanguages: languages }), EditorView.lineWrapping]}

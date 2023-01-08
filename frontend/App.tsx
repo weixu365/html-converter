@@ -36,8 +36,11 @@ export function App(){
   return (
     <div>
       <h1>Html Converter</h1>
+      <div>
+        Using wasm version of <a href="https://github.com/raphlinus/pulldown-cmark">pulldown cmark</a> packed with <a href="https://github.com/rustwasm/wasm-pack">wasm-pack</a>
+      </div>
 
-      <div className="main h-100" onKeyDown={onKeyDown}>
+      <div className="main h-100 mt-3" onKeyDown={onKeyDown}>
         <div className='col-6'>
           <Button variant="primary" className="mb-2" onClick={convert}>Convert</Button>
 

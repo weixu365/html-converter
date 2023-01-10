@@ -16,8 +16,8 @@ import { languages } from '@codemirror/language-data';
 import { EditorView } from '@codemirror/view';
 
 import * as md from "../pkg/md_to_html"
-import './App.css'
 import { CheatSheet } from './CheatSheet';
+import './App.css'
 
 export function App(){
   const [store, setStore] = useState({
@@ -73,31 +73,34 @@ export function App(){
   }
   
   return (
-    <div>
-      <div className="position-relative">
-        <h1>Html Converter</h1>
+    <div className="d-flex flex-column h-100">
+      <div className="d-flex border-bottom pb-2 header">
+        <h1 className="mb-0">Html Converter</h1>
 
-        <span className="links position-absolute top-0 end-0 m-2">
+        <div className="flex-grow-1 ms-3 align-self-end">
+          Using the wasm version of <a href="https://github.com/raphlinus/pulldown-cmark">pulldown cmark</a> packed
+          with <a href="https://github.com/rustwasm/wasm-pack">wasm-pack</a>
+        </div>
+
+        <div className="links align-self-end">
           <a href="https://github.com/weixu365/html-converter"><i className="bi bi-github"></i></a>
-        </span>
-      </div>
-      <div>
-        Using the wasm version of <a href="https://github.com/raphlinus/pulldown-cmark">pulldown cmark</a> packed
-        with <a href="https://github.com/rustwasm/wasm-pack">wasm-pack</a>
+        </div>
       </div>
 
-      <div className="main container-fluid mt-3" onKeyDown={onKeyDown}>
-        <div className="row g-2">
-          <div className='col-12 col-lg-6'>
-            <Form.Select className="select-library" defaultValue={store.library} onChange={changeLibrary}>
-              <option value="pulldown-cmark">pulldown-cmark (Rust)</option>
-              <option value="marked">marked (Nodejs)</option>
-            </Form.Select>
+      <div className="main container-fluid flex-grow-1 mt-3" onKeyDown={onKeyDown}>
+        <div className="row g-2 h-100">
+          <div className="col-12 col-lg-6 d-flex flex-column">
+            <div>
+              <Form.Select className="select-library" defaultValue={store.library} onChange={changeLibrary}>
+                <option value="pulldown-cmark">pulldown-cmark (Rust)</option>
+                <option value="marked">marked (Nodejs)</option>
+              </Form.Select>
 
-            <Button variant="primary" className="mb-1 ms-2" onClick={convert}>Convert</Button>
+              <Button variant="primary" className="mb-1 ms-2" onClick={convert}>Convert</Button>
+            </div>
 
             <CodeMirror
-              className='md-textarea border'
+              className="md-textarea border flex-grow-1"
               theme="dark"
               value={markdownContent.current}
               onChange={updateMarkdown}
@@ -106,11 +109,11 @@ export function App(){
             />
           </div>
           
-          <div className='col-12 col-lg-6'>
+          <div className="col-12 col-lg-6 d-flex flex-column html-result">
             <Tabs defaultActiveKey="Html">
               <Tab eventKey="Html" title="Html">
                 <CodeMirror
-                  className='md-html border'
+                  className="md-html border"
                   theme="dark"
                   value={store.htmlResult}
                   extensions={[html(), EditorView.lineWrapping]}
@@ -118,7 +121,7 @@ export function App(){
               </Tab>
               <Tab eventKey="Preview" title="Preview">
                 <div ref={highlightedHtmlContentRef} className="border preview line-numbers p-1"></div>
-                <div ref={intermediateHtmlContentRef} className='d-none line-numbers' dangerouslySetInnerHTML={{__html: store.htmlResult}} ></div>
+                <div ref={intermediateHtmlContentRef} className="d-none line-numbers" dangerouslySetInnerHTML={{__html: store.htmlResult}} ></div>
               </Tab>
             </Tabs>
           </div>

@@ -1,22 +1,22 @@
 
 import React, { ChangeEvent, KeyboardEvent, KeyboardEventHandler, useEffect, useRef, useState } from 'react';
-import * as Prism from 'prismjs';
-import 'prismjs/plugins/line-numbers/prism-line-numbers';
-import 'prismjs/plugins/autoloader/prism-autoloader';
-
-import "prismjs/themes/prism-tomorrow.min.css";
-import "prismjs/plugins/line-numbers/prism-line-numbers.min.css";
 
 import { marked } from 'marked';
 import { Button, Form, Tab, Tabs } from 'react-bootstrap';
-import CodeMirror from '@uiw/react-codemirror';
 import { markdown, markdownLanguage } from '@codemirror/lang-markdown';
 import { html } from '@codemirror/lang-html';
 import { languages } from '@codemirror/language-data';
 import { EditorView } from '@codemirror/view';
+import CodeMirror from '@uiw/react-codemirror';
+import * as Prism from 'prismjs';
+import 'prismjs/plugins/line-numbers/prism-line-numbers';
+import 'prismjs/plugins/autoloader/prism-autoloader';
 
 import * as md from "../pkg/md_to_html"
 import { CheatSheet } from './CheatSheet';
+
+import "prismjs/themes/prism-tomorrow.min.css";
+import "prismjs/plugins/line-numbers/prism-line-numbers.min.css";
 import './App.css'
 
 export function App(){

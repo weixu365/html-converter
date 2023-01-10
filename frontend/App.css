@@ -1,0 +1,45 @@
+.header .links {
+    font-size: 1.5em;
+}
+
+div.main {
+    padding: 0;
+}
+
+div.main .row {
+    min-height: 600px;
+}
+
+select.select-library {
+    width: auto;
+    display: inline-block;
+}
+
+.cm-editor {
+    height: 100%;
+    min-height: 600px;
+}
+
+.duration {
+    height: 1em;
+}
+
+.html-result .tab-content {
+    flex: 2;
+}
+
+.html-result .tab-content .tab-pane {
+    height: 100%;
+}
+
+.html-result .tab-content .md-html {
+    height: 100%;
+    min-height: 600px;
+}
+
+.html-result .tab-content .preview {
+    height: 100%;
+    min-height: 600px;
+    overflow: auto;
+}
+

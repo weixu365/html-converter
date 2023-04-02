@@ -19,6 +19,26 @@ import "prismjs/themes/prism-tomorrow.min.css";
 import "prismjs/plugins/line-numbers/prism-line-numbers.min.css";
 import './App.css'
 
+function useInterval(callback: () => void, delay: number) {
+  const savedCallback = useRef(callback);
+
+  // Remember the latest callback.
+  useEffect(() => {
+    savedCallback.current = callback;
+  }, [callback]);
+
+  // Set up the interval.
+  useEffect(() => {
+    function tick() {
+      savedCallback.current();
+    }
+    if (delay !== null) {
+      let id = setInterval(tick, delay);
+      return () => clearInterval(id);
+    }
+  }, [delay]);
+}
+
 export function App(){
   const [store, setStore] = useState({
     library: "pulldown-cmark",
@@ -36,14 +56,12 @@ export function App(){
     changed.current = true;
   }, [store]);
 
-  useEffect(() => {
-    setInterval(() => {
-      if(changed.current) {
-        changed.current = false;
-        convert();
-      }
-    }, 500);  
-  })
+  useInterval(() => {
+    if(changed.current) {
+      changed.current = false;
+      convert();
+    }
+  }, 200);  
   
   const changeLibrary = React.useCallback((e: ChangeEvent<HTMLSelectElement>) => {
     setStore({...store, library: e.target.value, convertDurationInMs: -1});
@@ -52,7 +70,7 @@ export function App(){
   const convert = () => {
     const toHtml = store.library === 'pulldown-cmark' ? md.md_to_html : marked.parse;
     const start = Date.now();
-    const html = toHtml(markdownContent.current)
+    const html = toHtml(markdownContent.current) + "\n\n" + store.library;
     const duration = Date.now() - start;
 
     setStore({...store, htmlResult: html, convertDurationInMs: duration});

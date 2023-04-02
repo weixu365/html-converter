@@ -70,7 +70,7 @@ export function App(){
   const convert = () => {
     const toHtml = store.library === 'pulldown-cmark' ? md.md_to_html : marked.parse;
     const start = Date.now();
-    const html = toHtml(markdownContent.current) + "\n\n" + store.library;
+    const html = toHtml(markdownContent.current);
     const duration = Date.now() - start;
 
     setStore({...store, htmlResult: html, convertDurationInMs: duration});
